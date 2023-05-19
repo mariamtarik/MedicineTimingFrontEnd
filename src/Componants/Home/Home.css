@@ -1,0 +1,12 @@
+.Home-layer {
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 83, 97, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.med {
+  width: 90%;
+}
+
