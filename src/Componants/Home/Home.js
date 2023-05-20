@@ -60,6 +60,7 @@ const Home = (props) => {
 
     // Check if the user has granted permission for notifications
     if (Push.Permission.get() === Push.Permission.GRANTED) {
+      const timestamp = Date.now(); 
       const options = {
         body: message,
         icon: './images/medicine.jpg',
@@ -68,7 +69,8 @@ const Home = (props) => {
       };
 
       Push.create('Medicines', options);
-      setReload("exist");
+      setReload(timestamp);
+      console.log(timestamp);
       
       // window.location.reload();
     }

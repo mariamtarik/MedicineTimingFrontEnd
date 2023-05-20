@@ -34,7 +34,7 @@ const ShowMedicines = (props) => {
     }
   }, [props.newMedicine]);
   useEffect(() => {
-  if (props.reload === "exist" ) {
+  if (props.reload) {
   getAllMedicine();
     }
   }, [props.reload]);
