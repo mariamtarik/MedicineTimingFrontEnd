@@ -15,6 +15,7 @@ const ShowMedicines = (props) => {
 
   const handleClose = () => {
     setShow(false);
+    setState("")
   };
   const handleShow = (medicine) => {
     setUpdateMedicine(medicine);
