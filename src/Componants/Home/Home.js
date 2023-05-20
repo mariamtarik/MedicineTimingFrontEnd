@@ -8,6 +8,7 @@ import { Dropdown } from "react-bootstrap";
 import axios from "axios";
 import ShowMedicines from "./ShowMedicines";
 import io from 'socket.io-client';
+import Push from 'push.js';
 
 const Home = (props) => {
   const [state, setState] = useState("");
@@ -29,44 +30,83 @@ const Home = (props) => {
     if (Notification.permission !== 'granted') {
       Notification.requestPermission();
     }
-  
+
     // Create the Socket.IO connection and listen for 'notification' events
     const socket = io('https://medicinetimingbeckend.onrender.com');
-  
+
     socket.on('medicineTimingNotification', (data) => {
       // Display the notification when received
-      console.log(data.message)
+      console.log(data.message);
       showNotification(data.message);
     });
-  
+
     return () => {
       socket.disconnect();
     };
   }, []);
+
   const showNotification = (message) => {
-    // Check if the browser supports notifications
-    if (!('Notification' in window)) {
+    // Check if Push.js is supported
+    if (!Push.Permission.has()) {
       console.log('This browser does not support desktop notification');
       return;
     }
-  
+
     // Check if the user has granted permission for notifications
-    if (Notification.permission === 'granted') {
+    if (Push.Permission.get() === Push.Permission.GRANTED) {
       const options = {
-      body: message,
-      icon: './images/medicine.jpg',
-       vibrate: [200, 100, 200], // to control the vibration pattern
-     
+        body: message,
+        icon: './images/medicine.jpg',
+        timeout: 5000, // Auto-close the notification after 4 seconds
+        vibrate: [200, 100, 200], // Control the vibration pattern
       };
-  
-      const notification = new Notification('Medicines', options);
-  
-      // Handle the user clicking on the notification
-      // notification.onclick = () => {
-      //   // Add your desired action when the user clicks on the notification
-      // };
+
+      Push.create('Medicines', options);
     }
   };
+  // useEffect(() => {
+  //   // Request permission for notifications
+  //   if (Notification.permission !== 'granted') {
+  //     Notification.requestPermission();
+  //   }
+  
+  //   // Create the Socket.IO connection and listen for 'notification' events
+  //   const socket = io('https://medicinetimingbeckend.onrender.com');
+  
+  //   socket.on('medicineTimingNotification', (data) => {
+  //     // Display the notification when received
+  //     console.log(data.message)
+  //     showNotification(data.message);
+  //   });
+  
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, []);
+  // const showNotification = (message) => {
+  //   // Check if the browser supports notifications
+  //   if (!('Notification' in window)) {
+  //     console.log('This browser does not support desktop notification');
+  //     return;
+  //   }
+  
+  //   // Check if the user has granted permission for notifications
+  //   if (Notification.permission === 'granted') {
+  //     const options = {
+  //     body: message,
+  //     icon: './images/medicine.jpg',
+  //      vibrate: [200, 100, 200], // to control the vibration pattern
+     
+  //     };
+  
+  //     const notification = new Notification('Medicines', options);
+  
+  //     // Handle the user clicking on the notification
+  //     // notification.onclick = () => {
+  //     //   // Add your desired action when the user clicks on the notification
+  //     // };
+  //   }
+  // };
 
   const handleTimeChange = (event) => {
     // Update the timeValue state with the new value of the time field
