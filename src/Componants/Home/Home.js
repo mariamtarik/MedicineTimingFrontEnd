@@ -68,15 +68,6 @@ const Home = (props) => {
       };
 
       Push.create('Medicines', options);
-      Push.on('click', function () {
-        // Add your desired action when the user clicks on the notification
-        console.log('Notification clicked!');
-        // Perform any action you want here
-  
-        // Optional: Close the notification
-        Push.close('Medicines');
-      });
-      
       setReload(timestamp);
       console.log(timestamp);
       
