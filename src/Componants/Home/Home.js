@@ -12,6 +12,7 @@ import Push from 'push.js';
 
 const Home = (props) => {
   const [state, setState] = useState("");
+  const [reload ,setReload]=useState("");
   const[newMedicine,setNewMedicine]=useState({})
 
   const [timeValue, setTimeValue] = useState(null);
@@ -67,7 +68,9 @@ const Home = (props) => {
       };
 
       Push.create('Medicines', options);
-      window.location.reload();
+      setReload("exist");
+      
+      // window.location.reload();
     }
   };
   // useEffect(() => {
@@ -222,7 +225,7 @@ const Home = (props) => {
           </div>
         </div>
       </section>
-      <ShowMedicines newMedicine={newMedicine}/>
+      <ShowMedicines newMedicine={newMedicine} reload={reload}/>
       <Modal show={show} onHide={handleClose}>
         {/* <Modal.Header closeButton>
         </Modal.Header> */}

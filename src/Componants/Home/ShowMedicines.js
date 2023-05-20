@@ -33,6 +33,11 @@ const ShowMedicines = (props) => {
       setAllMedicines((prevMedicines) => [...prevMedicines, props.newMedicine]);
     }
   }, [props.newMedicine]);
+  useEffect(() => {
+  if (props.reload === "exist" ) {
+  getAllMedicine();
+    }
+  }, [props.reload]);
   const getAllMedicine = () => {
     axios
       .get("https://medicinetimingbeckend.onrender.com/api/medicine/allMedicine", {
