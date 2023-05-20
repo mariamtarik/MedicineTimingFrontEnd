@@ -17,7 +17,11 @@ const Home = (props) => {
   const [timeValue, setTimeValue] = useState(null);
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    setState("")
+  
+  }
   const handleShow = () => setShow(true);
   const {
     register,
@@ -25,6 +29,7 @@ const Home = (props) => {
     formState: { errors },
     reset,
   } = useForm();
+
   useEffect(() => {
     // Request permission for notifications
     if (Notification.permission !== 'granted') {
@@ -62,6 +67,7 @@ const Home = (props) => {
       };
 
       Push.create('Medicines', options);
+      window.location.reload();
     }
   };
   // useEffect(() => {
