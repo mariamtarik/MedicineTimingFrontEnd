@@ -64,11 +64,19 @@ const Home = (props) => {
       const options = {
         body: message,
         icon: './images/medicine.jpg',
-        timeout: 5000, // Auto-close the notification after 4 seconds
         vibrate: [200, 100, 200], // Control the vibration pattern
       };
 
       Push.create('Medicines', options);
+      Push.on('click', function () {
+        // Add your desired action when the user clicks on the notification
+        console.log('Notification clicked!');
+        // Perform any action you want here
+  
+        // Optional: Close the notification
+        Push.close('Medicines');
+      });
+      
       setReload(timestamp);
       console.log(timestamp);
       
