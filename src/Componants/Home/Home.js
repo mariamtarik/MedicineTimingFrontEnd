@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import Modal from "react-bootstrap/Modal";
 import "./Home.css";
+import "../../sw.js"
 import { useForm } from "react-hook-form";
 import { TextField } from "@material-ui/core";
 import { Dropdown } from "react-bootstrap";
@@ -78,6 +79,7 @@ const Home = (props) => {
   
      // const notification = new Notification('Medicines', options);
       navigator.serviceWorker.getRegistration().then((registration) => {
+        console.log(registration);
         if (registration) {
   
     registration.showNotification('Medicines',options);
