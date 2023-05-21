@@ -9,6 +9,8 @@ import axios from "axios";
 import ShowMedicines from "./ShowMedicines";
 import io from 'socket.io-client';
 import Push from 'push.js';
+import jwtDecode from "jwt-decode";
+
 
 const Home = (props) => {
   const [state, setState] = useState("");
@@ -31,6 +33,7 @@ const Home = (props) => {
     reset,
   } = useForm();
 
+
   useEffect(() => {
     // Request permission for notifications
     if (Notification.permission !== 'granted') {
@@ -38,12 +41,18 @@ const Home = (props) => {
     }
 
     // Create the Socket.IO connection and listen for 'notification' events
-    const socket = io('https://medicinetimingbeckend.onrender.com');
+    let socket = io('https://medicinetiming.onrender.com');
 
     socket.on('medicineTimingNotification', (data) => {
       // Display the notification when received
       console.log(data.message);
       showNotification(data.message);
+    });
+    socket.on('connect', () => {
+      // Emit the 'userConnected' event and pass the userId as a parameter
+      let token = localStorage.getItem("userToken"); // Encoded token
+      let decodedToken = jwtDecode(token);
+      socket.emit('userConnected', decodedToken.id);
     });
 
     return () => {
@@ -74,64 +83,23 @@ const Home = (props) => {
       // window.location.reload();
     }
   };
-  // useEffect(() => {
-  //   // Request permission for notifications
-  //   if (Notification.permission !== 'granted') {
-  //     Notification.requestPermission();
-  //   }
-  
-  //   // Create the Socket.IO connection and listen for 'notification' events
-  //   const socket = io('https://medicinetimingbeckend.onrender.com');
-  
-  //   socket.on('medicineTimingNotification', (data) => {
-  //     // Display the notification when received
-  //     console.log(data.message)
-  //     showNotification(data.message);
-  //   });
-  
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, []);
-  // const showNotification = (message) => {
-  //   // Check if the browser supports notifications
-  //   if (!('Notification' in window)) {
-  //     console.log('This browser does not support desktop notification');
-  //     return;
-  //   }
-  
-  //   // Check if the user has granted permission for notifications
-  //   if (Notification.permission === 'granted') {
-  //     const options = {
-  //     body: message,
-  //     icon: './images/medicine.jpg',
-  //      vibrate: [200, 100, 200], // to control the vibration pattern
-     
-  //     };
-  
-  //     const notification = new Notification('Medicines', options);
-  
-  //     // Handle the user clicking on the notification
-  //     // notification.onclick = () => {
-  //     //   // Add your desired action when the user clicks on the notification
-  //     // };
-  //   }
-  // };
 
   const handleTimeChange = (event) => {
     // Update the timeValue state with the new value of the time field
     setTimeValue(new Date(event.target.value));
   };
   const onSubmit = (medicine) => {
+   
     // Convert the time value to UTC string before submitting the form
     medicine.time = timeValue.toUTCString();
-    medicine.duration = +medicine.duration
+    medicine.duration = +medicine.duration;
+  
 
     // Do something with the data, e.g. send it to the server
     console.log(medicine);
     setNewMedicine(medicine);
     axios
-      .post("https://medicinetimingbeckend.onrender.com/api/medicine/addMedicine", medicine, {
+      .post("https://medicinetiming.onrender.com/api/medicine/addMedicine", medicine, {
         headers: {
           authorization: "Bearer " + localStorage.getItem("userToken"),
         },

@@ -31,7 +31,7 @@ const Signup = () => {
   const onSubmit = (user) => {
     console.log(user);
     axios
-      .post("https://medicinetimingbeckend.onrender.com/api/auth/signup", user)
+      .post("https://medicinetiming.onrender.com/api/auth/signup", user)
       .then(({ data }) => {
         // console.log(data);
         if (data.message === "registerd success") {

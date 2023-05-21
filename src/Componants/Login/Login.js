@@ -26,7 +26,7 @@ const Login = (props) => {
   } = useForm();
   const onSubmit = (user) => {
     axios
-      .post("https://medicinetimingbeckend.onrender.com/api/auth/signin", user)
+      .post("https://medicinetiming.onrender.com/api/auth/signin", user)
       .then(({ data }) => {
         console.log(data);
         if (data.message === "signin success") {

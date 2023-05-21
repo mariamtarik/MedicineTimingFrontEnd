@@ -40,7 +40,7 @@ const ShowMedicines = (props) => {
   }, [props.reload]);
   const getAllMedicine = () => {
     axios
-      .get("https://medicinetimingbeckend.onrender.com/api/medicine/allMedicine", {
+      .get("https://medicinetiming.onrender.com/api/medicine/allMedicine", {
         headers: {
           authorization: "Bearer " + localStorage.getItem("userToken"),
         },
@@ -63,7 +63,7 @@ const ShowMedicines = (props) => {
   let deleteOne = (id) => {
     console.log(id);
     axios
-      .delete(`https://medicinetimingbeckend.onrender.com/api/medicine/deleteMedicine/${id}`, {
+      .delete(`https://medicinetiming.onrender.com/api/medicine/deleteMedicine/${id}`, {
         headers: {
           authorization: "Bearer " + localStorage.getItem("userToken"),
         },
@@ -89,7 +89,7 @@ const ShowMedicines = (props) => {
       console.log(updateMedicine);
       axios
         .put(
-          `https://medicinetimingbeckend.onrender.com/api/medicine/updateMedicine/${updateMedicine._id}`,
+          `https://medicinetiming.onrender.com/api/medicine/updateMedicine/${updateMedicine._id}`,
           medicine,
           {
             headers: {
