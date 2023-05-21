@@ -8,7 +8,7 @@ import { Dropdown } from "react-bootstrap";
 import axios from "axios";
 import ShowMedicines from "./ShowMedicines";
 import io from 'socket.io-client';
-import Push from 'push.js';
+// import Push from 'push.js';
 import jwtDecode from "jwt-decode";
 
 
@@ -59,30 +59,62 @@ const Home = (props) => {
       socket.disconnect();
     };
   }, []);
-
   const showNotification = (message) => {
-    // Check if Push.js is supported
-    if (!Push.Permission.has()) {
+    // Check if the browser supports notifications
+    if (!('Notification' in window)) {
       console.log('This browser does not support desktop notification');
       return;
     }
-
+  
     // Check if the user has granted permission for notifications
-    if (Push.Permission.get() === Push.Permission.GRANTED) {
+    if (Notification.permission === 'granted') {
       const timestamp = Date.now(); 
       const options = {
-        body: message,
-        icon: './images/medicine.jpg',
-        vibrate: [200, 100, 200], // Control the vibration pattern
+      body: message,
+      icon: './images/medicine.jpg',
+       vibrate: [200, 100, 200], // to control the vibration pattern
+     
       };
-
-      Push.create('Medicines', options);
-      setReload(timestamp);
-      console.log(timestamp);
-      
-      // window.location.reload();
+  
+     // const notification = new Notification('Medicines', options);
+      navigator.serviceWorker.getRegistration().then((registration) => {
+        if (registration) {
+  
+    registration.showNotification('Medicines',options);
+    setReload(timestamp);
+        }
+      });
+    
+      // Handle the user clicking on the notification
+      // notification.onclick = () => {
+      //   // Add your desired action when the user clicks on the notification
+      // };
     }
   };
+
+  // const showNotification = (message) => {
+  //   // Check if Push.js is supported
+  //   if (!Push.Permission.has()) {
+  //     console.log('This browser does not support desktop notification');
+  //     return;
+  //   }
+
+  //   // Check if the user has granted permission for notifications
+  //   if (Push.Permission.get() === Push.Permission.GRANTED) {
+  //     const timestamp = Date.now(); 
+  //     const options = {
+  //       body: message,
+  //       icon: './images/medicine.jpg',
+  //       vibrate: [200, 100, 200], // Control the vibration pattern
+  //     };
+
+  //     Push.create('Medicines', options);
+  //     setReload(timestamp);
+  //     console.log(timestamp);
+      
+  //     // window.location.reload();
+  //   }
+  // };
 
   const handleTimeChange = (event) => {
     // Update the timeValue state with the new value of the time field
